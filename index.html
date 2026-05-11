@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lyneth VODs Archive</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #eef7ff, #dceeff, #f7fbff);
+      overflow-x: hidden;
+      overflow-y: auto;
+      padding: 20px;
+      color: #18324a;
+    }
+
+    .glow {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.03);
+      filter: blur(80px);
+      animation: float 8s infinite ease-in-out;
+    }
+
+    .glow:nth-child(1) {
+      top: -100px;
+      left: -100px;
+    }
+
+    .glow:nth-child(2) {
+      bottom: -100px;
+      right: -100px;
+      animation-delay: 3s;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(20px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .card {
+      margin: 0;
+      position: relative;
+      z-index: 2;
+      width: 90%;
+      max-width: 420px;
+      padding: 40px;
+      border-radius: 28px;
+      backdrop-filter: blur(18px);
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(120,170,220,0.25);
+      box-shadow: 0 10px 40px rgba(120,170,220,0.18);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+      color: #173754;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    p {
+      color: #35516d;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: 2px solid rgba(120,170,220,0.25);
+      outline: none;
+      background: rgba(255,255,255,0.92);
+      color: #23425d;
+      font-size: 1rem;
+      margin-bottom: 16px;
+    }
+
+    input::placeholder {
+      color: #7b93ac;
+    }
+
+    .password-wrapper {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      background: linear-gradient(135deg, #9fd4ff, #ffffff, #c8f1d2);
+      color: #23425d;
+      transition: 0.25s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      opacity: 0.95;
+    }
+
+    .message {
+      margin-top: 16px;
+      font-size: 0.95rem;
+      color: #d14b5d;
+      min-height: 20px;
+    }
+
+    .secret-page {
+      display: none;
+      text-align: center;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .secret-page h2 {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .secret-page p {
+      margin-bottom: 10px;
+      color: #35516d;
+    }
+
+    .vod-list {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      text-align: left;
+    }
+
+    .vod-card {
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(130,170,220,0.2);
+      border-left: 6px solid #9fd4ff;
+      border-radius: 18px;
+      padding: 18px;
+      transition: 0.25s;
+    }
+
+    .vod-card:nth-child(2n) {
+      border-left-color: #d14b5d;
+    }
+
+    .vod-card:nth-child(3n) {
+      border-left-color: #9dd8b6;
+    }
+
+    .vod-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(120,170,220,0.12);
+    }
+
+    .vod-card h3 {
+      margin-bottom: 8px;
+      color: #173754;
+    }
+
+    .vod-card a {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      text-decoration: none;
+      background: linear-gradient(135deg, #9fd4ff, #ffffff);
+      color: #23425d;
+      font-weight: bold;
+    }
+
+    .vod-card a:hover {
+      opacity: 0.92;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="glow"></div>
+
+  <div class="card" id="loginBox">
+    <h1>🐇 Lyneth VODs Archive</h1>
+    <p>
+      This archive is only accessible to membership.<br>
+      Please enter the password.
+    </p>
+
+    <div class="password-wrapper">
+      <input type="password" id="password" placeholder="Enter password..." />
+    </div>
+
+    <button onclick="checkPassword()">Enter Archive</button>
+
+    <div class="message" id="message"></div>
+  </div>
+
+  <div class="card secret-page" id="secretPage">
+    <h2>❄️ Welcome to Lyneth's VOD Archive</h2>
+    <p>You have successfully unlocked the membership archive.</p>
+    <p>คลังเก็บคลิปย้อนหลังและช่วงเวลาต่าง ๆ ของ Lyneth ✨</p>
+
+    <div class="vod-list">
+      <div class="vod-card">
+        <h3>🌲 trees hate you</h3>
+        <p>เกมชวนปวดหัวที่ต้นไม้พร้อมเกลียดทุกคน</p>
+        <a href="-"_blank">Watch Archive</a>
+      </div>
+
+      <div class="vod-card">
+        <h3>🎮 อยากเล่นเกมตู*</h3>
+        <p>บ่นเกมไป เล่นไป และหลุดขำทั้งไลฟ์</p>
+        <a href="-" target="_blank">Watch Archive</a>
+      </div>
+
+      <div class="vod-card">
+        <h3>🧩 มือใหม่ครับ</h3>
+        <p>ช่วงเริ่มต้นกับความวุ่นวายแบบมือใหม่</p>
+        <a href="-" target="_blank">Watch Archive</a>
+      </div>
+
+      <div class="vod-card">
+        <h3>🖋️ มาอวดงานไทโป</h3>
+        <p>รวมงาน typography และพูดคุยสบาย ๆ</p>
+        <a href="-" target="_blank">Watch Archive</a>
+      </div>
+
+      <div class="vod-card">
+        <h3>🔮 chef's shift & meowgic</h3>
+        <p>เป็นเชฟมือหนึ่งและนักเวทเหมียว</p>
+        <a href="-" target="_blank">Watch Archive</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const correctPassword = "snowrabbit-417-mizuyu";
+
+    
+
+    function checkPassword() {
+      const input = document.getElementById("password").value;
+      const message = document.getElementById("message");
+
+      if (input === correctPassword) {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("secretPage").style.display = "block";
+      } else {
+        message.textContent = "Wrong password";
+      }
+    }
+  </script>
+</body>
+</html>
